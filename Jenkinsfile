@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        DOCKER_PATH = "/usr/local/bin/docker"
         DOCKER_IMAGE = "flask-app"
         CONTAINER_NAME = "flask-container"
     }
@@ -16,7 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh'docker build -t my-flask-app .'
+                    sh '${DOCKER_PATH} build -t ${DOCKER_IMAGE} .'
                 }
             }
         }
@@ -25,11 +26,11 @@ pipeline {
             steps {
                 script {
                     // Stop and remove any existing container
-                    sh 'docker stop ${CONTAINER_NAME} || true'
-                    sh 'docker rm ${CONTAINER_NAME} || true'
+                    sh '${DOCKER_PATH} stop "$CONTAINER_NAME" || true'
+                    sh '${DOCKER_PATH} rm "$CONTAINER_NAME" || true'
 
                     // Run the container
-                    sh 'docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${DOCKER_IMAGE}'
+                    sh '${DOCKER_PATH} run -d -p 5000:5000 --name "$CONTAINER_NAME" "$DOCKER_IMAGE"'
                 }
             }
         }
@@ -37,7 +38,7 @@ pipeline {
         stage('Clean Up') {
             steps {
                 script {
-                    sh 'docker system prune -f'
+                    sh '${DOCKER_PATH} system prune -f'
                 }
             }
         }
