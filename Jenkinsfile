@@ -30,7 +30,7 @@ pipeline {
                     sh '${DOCKER_PATH} rm "$CONTAINER_NAME" || true'
 
                     // Run the container
-                    sh '${DOCKER_PATH} run -d -p 5000:5000 --name "$CONTAINER_NAME" "$DOCKER_IMAGE"'
+                    sh '${DOCKER_PATH} run -d -p 5001:5000 --name "$CONTAINER_NAME" "$DOCKER_IMAGE"'
                 }
             }
         }
